@@ -1,0 +1,46 @@
+name: Generate CV PDF and publish to website
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout MyCV
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Render PDF from lebenslauf-luc-wilcox.html
+        run: npm run render-pdf
+
+      - name: Checkout website repo
+        uses: actions/checkout@v4
+        with:
+          repository: Luc-Wilcox/wilcox.build
+          token: ${{ secrets.WEBSITE_DEPLOY_TOKEN }}
+          path: website
+
+      - name: Replace PDF in website repo
+        run: cp lebenslauf-luc-wilcox.pdf website/lebenslauf-luc-wilcox.pdf
+
+      - name: Commit and push if changed
+        working-directory: website
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add lebenslauf-luc-wilcox.pdf
+          if git diff --cached --quiet; then
+            echo "PDF unchanged, nothing to publish."
+            exit 0
+          fi
+          git commit -m "Update CV PDF from MyCV@${GITHUB_SHA}"
+          git push

@@ -1,0 +1,10 @@
+{
+  "name": "mycv",
+  "private": true,
+  "scripts": {
+    "render-pdf": "node scripts/render-pdf.js"
+  },
+  "devDependencies": {
+    "puppeteer": "^23.0.0"
+  }
+}
