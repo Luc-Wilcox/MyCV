@@ -1,8 +1,11 @@
 const path = require('path');
 const puppeteer = require('puppeteer');
 
-const SOURCE = path.resolve(__dirname, '..', 'lebenslauf-luc-wilcox.html');
-const OUTPUT = path.resolve(__dirname, '..', 'lebenslauf-luc-wilcox.pdf');
+const sourceFile = process.argv[2] || 'lebenslauf-luc-wilcox.html';
+const outputFile = process.argv[3] || 'lebenslauf-luc-wilcox.pdf';
+
+const SOURCE = path.resolve(__dirname, '..', sourceFile);
+const OUTPUT = path.resolve(__dirname, '..', outputFile);
 
 (async () => {
   const browser = await puppeteer.launch({

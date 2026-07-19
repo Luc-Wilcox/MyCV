@@ -2,7 +2,8 @@
   "name": "mycv",
   "private": true,
   "scripts": {
-    "render-pdf": "node scripts/render-pdf.js"
+    "render-pdf": "node scripts/render-pdf.js lebenslauf-luc-wilcox.html lebenslauf-luc-wilcox.pdf",
+    "render-pdf:en": "node scripts/render-pdf.js lebenslauf-luc-wilcox-en.html lebenslauf-luc-wilcox-en.pdf"
   },
   "devDependencies": {
     "puppeteer": "^23.0.0"

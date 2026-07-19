@@ -19,28 +19,33 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Render PDF from lebenslauf-luc-wilcox.html
+      - name: Render German PDF from lebenslauf-luc-wilcox.html
         run: npm run render-pdf
+
+      - name: Render English PDF from lebenslauf-luc-wilcox-en.html
+        run: npm run render-pdf:en
 
       - name: Checkout website repo
         uses: actions/checkout@v4
         with:
-          repository: Luc-Wilcox/wilcox.build
+          repository: Luc-Wilcox/Wilcox.build
           token: ${{ secrets.WEBSITE_DEPLOY_TOKEN }}
           path: website
 
-      - name: Replace PDF in website repo
-        run: cp lebenslauf-luc-wilcox.pdf website/lebenslauf-luc-wilcox.pdf
+      - name: Replace PDFs in website repo
+        run: |
+          cp lebenslauf-luc-wilcox.pdf website/lebenslauf-luc-wilcox.pdf
+          cp lebenslauf-luc-wilcox-en.pdf website/lebenslauf-luc-wilcox-en.pdf
 
       - name: Commit and push if changed
         working-directory: website
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add lebenslauf-luc-wilcox.pdf
+          git add lebenslauf-luc-wilcox.pdf lebenslauf-luc-wilcox-en.pdf
           if git diff --cached --quiet; then
-            echo "PDF unchanged, nothing to publish."
+            echo "PDFs unchanged, nothing to publish."
             exit 0
           fi
-          git commit -m "Update CV PDF from MyCV@${GITHUB_SHA}"
+          git commit -m "Update CV PDFs from MyCV@${GITHUB_SHA}"
           git push
